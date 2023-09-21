@@ -14,20 +14,36 @@ from rest_framework import generics, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.decorators import action, api_view
-from rest_framework.permissions import (SAFE_METHODS, AllowAny,
-                                        IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (
+    SAFE_METHODS,
+    AllowAny,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly
+)
 from rest_framework.response import Response
 
 from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import IsAdminOrReadOnly
-from recipes.models import (FavoriteRecipe, Ingredient, Recipe, ShoppingCart,
-                            Subscribe, Tag)
-from .serializers import (IngredientSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, SubscribeRecipeSerializer,
-                          SubscribeSerializer, TagSerializer, TokenSerializer,
-                          UserCreateSerializer, UserListSerializer,
-                          UserPasswordSerializer)
+from recipes.models import (
+    FavoriteRecipe,
+    Ingredient,
+    Recipe,
+    ShoppingCart,
+    Subscribe,
+    Tag
+)
+from .serializers import (
+    IngredientSerializer,
+    RecipeReadSerializer,
+    RecipeWriteSerializer,
+    SubscribeRecipeSerializer,
+    SubscribeSerializer,
+    TagSerializer,
+    TokenSerializer,
+    UserCreateSerializer,
+    UserListSerializer,
+    UserPasswordSerializer
+)
 
 User = get_user_model()
 FILENAME = 'shoppingcart.pdf'
@@ -72,7 +88,10 @@ class AddAndDeleteSubscribe(
     def get_object(self):
         user_id = self.kwargs['user_id']
         user = get_object_or_404(User, id=user_id)
-        self.check_object_permissions(self.request, user)
+        self.check_object_permissions(
+            self.request,
+            user
+        )
         return user
 
     def create(self, request, *args, **kwargs):
@@ -84,13 +103,22 @@ class AddAndDeleteSubscribe(
         if request.user.follower.filter(author=instance).exists():
             return Response(
                 {'errors': 'Уже подписан!'},
-                status=status.HTTP_400_BAD_REQUEST)
-        subs = request.user.follower.create(author=instance)
-        serializer = self.get_serializer(subs)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        subs = request.user.follower.create(
+            author=instance
+        )
+        serializer = self.get_serializer(
+            subs
+        )
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
 
     def perform_destroy(self, instance):
-        self.request.user.follower.filter(author=instance).delete()
+        self.request.user.follower.filter(
+            author=instance).delete()
 
 
 class AddDeleteFavoriteRecipe(
@@ -103,7 +131,10 @@ class AddDeleteFavoriteRecipe(
         instance = self.get_object()
         request.user.favorite_recipe.recipe.add(instance)
         serializer = self.get_serializer(instance)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
 
     def perform_destroy(self, instance):
         self.request.user.favorite_recipe.recipe.remove(instance)
@@ -119,7 +150,10 @@ class AddDeleteShoppingCart(
         instance = self.get_object()
         request.user.shopping_cart.recipe.add(instance)
         serializer = self.get_serializer(instance)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
 
     def perform_destroy(self, instance):
         self.request.user.shopping_cart.recipe.remove(instance)
@@ -132,13 +166,18 @@ class AuthToken(ObtainAuthToken):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(
+            data=request.data
+        )
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
+        token, created = Token.objects.get_or_create(
+            user=user
+        )
         return Response(
             {'auth_token': token.key},
-            status=status.HTTP_201_CREATED)
+            status=status.HTTP_201_CREATED
+        )
 
 
 class UsersViewSet(UserViewSet):
@@ -163,8 +202,31 @@ class UsersViewSet(UserViewSet):
         return UserListSerializer
 
     def perform_create(self, serializer):
-        password = make_password(self.request.data['password'])
-        serializer.save(password=password)
+        password = make_password(
+            self.request.data['password']
+        )
+        serializer.save(
+            password=password
+        )
+
+    @action(
+        detail=False,
+        methods=['patch'],
+        permission_classes=(IsAuthenticated,))
+    def set_password(self, request):
+        user = request.user
+        serializer = UserPasswordSerializer(
+            data=request.data,
+            context={'request': request}
+        )
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.validated_data['new_password']
+        user.set_password(new_password)
+        user.save()
+        return Response(
+            {'detail': 'Пароль успешно изменен.'},
+            status=status.HTTP_200_OK
+        )
 
     @action(
         detail=False,
@@ -210,10 +272,13 @@ class RecipesViewSet(viewsets.ModelViewSet):
             is_favorited=Value(False),
         ).select_related('author').prefetch_related(
             'tags', 'ingredients', 'recipe',
-            'shopping_cart', 'favorite_recipe')
+            'shopping_cart', 'favorite_recipe'
+        )
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(
+            author=self.request.user
+        )
 
     @action(
         detail=False,
@@ -235,13 +300,17 @@ class RecipesViewSet(viewsets.ModelViewSet):
         page.setFont('Vera', 14)
         if shopping_cart:
             indent = 20
-            page.drawString(x_position, y_position, 'Cписок покупок:')
+            page.drawString(
+                x_position, y_position,
+                'Cписок покупок:'
+            )
             for index, recipe in enumerate(shopping_cart, start=1):
                 page.drawString(
                     x_position, y_position - indent,
                     f'{index}. {recipe["ingredients__name"]} - '
                     f'{recipe["amount"]} '
-                    f'{recipe["ingredients__measurement_unit"]}.')
+                    f'{recipe["ingredients__measurement_unit"]}.'
+                )
                 y_position -= 15
                 if y_position <= 50:
                     page.showPage()
@@ -249,7 +318,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
             page.save()
             buffer.seek(0)
             return FileResponse(
-                buffer, as_attachment=True, filename=FILENAME)
+                buffer, as_attachment=True, filename=FILENAME
+            )
         page.setFont('Vera', 24)
         page.drawString(
             x_position,
@@ -257,7 +327,11 @@ class RecipesViewSet(viewsets.ModelViewSet):
             'Cписок покупок пуст!')
         page.save()
         buffer.seek(0)
-        return FileResponse(buffer, as_attachment=True, filename=FILENAME)
+        return FileResponse(
+            buffer,
+            as_attachment=True,
+            filename=FILENAME
+        )
 
 
 class TagsViewSet(
