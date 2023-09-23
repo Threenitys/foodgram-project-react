@@ -118,10 +118,10 @@ docker-compose -f docker-compose-local.yml up -d
 ```
 
 
-- После запуска проект будут доступен по адресу: [http://localhost/](http://localhost/)
+- После запуска проект будут доступен по адресу: [http://localhost:8080/](http://localhost:8080/)
 
 
-- Документация будет доступна по адресу: [http://localhost/api/docs/](http://localhost/api/docs/)
+- Документация будет доступна по адресу: [http://localhost:8080/api/docs/](http://localhost:8080/api/docs/)
 
 
 ### Автор:
