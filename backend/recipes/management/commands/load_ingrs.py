@@ -11,7 +11,12 @@ class Command(BaseCommand):
     help = 'Загрузка из csv файла'
 
     def handle(self, *args, **kwargs):
-        data_path = os.path.join(settings.BASE_DIR, 'code', 'data', 'ingredients.csv')
+        data_path = os.path.join(
+            settings.BASE_DIR,
+            'code',
+            'data',
+            'ingredients.csv'
+        )
 
         with open(
             data_path,
