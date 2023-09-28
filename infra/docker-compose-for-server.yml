@@ -3,8 +3,7 @@ version: '3.3'
 services:
 
   frontend:
-    container_name: foodgram_frontend
-    build: ../frontend
+    image: threenity/foodgram_frontend
     volumes:
       - ./frontend/:/app/result_build/
 
@@ -18,9 +17,7 @@ services:
       - ../.env
 
   backend:
-    container_name: foodgram_backend
-
-    build: ../backend
+    image: threenity/foodgram_backend
     restart: always
     volumes:
       - static_dir:/app/static/
