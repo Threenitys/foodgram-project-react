@@ -22,7 +22,7 @@ from PIL import Image
 
 CharField.register_lookup(Length)
 
-User = get_user_model()
+MyUser = get_user_model()
 
 
 class Tag(Model):
@@ -109,7 +109,7 @@ class Recipe(Model):
     author = ForeignKey(
         verbose_name="Автор рецепта",
         related_name="recipes",
-        to=User,
+        to=MyUser,
         on_delete=SET_NULL,
         null=True,
     )
@@ -239,7 +239,7 @@ class Favorites(Model):
     user = ForeignKey(
         verbose_name="Пользователь",
         related_name="favorites",
-        to=User,
+        to=MyUser,
         on_delete=CASCADE,
     )
     date_added = DateTimeField(
@@ -274,7 +274,7 @@ class Carts(Model):
     user = ForeignKey(
         verbose_name="Владелец списка",
         related_name="carts",
-        to=User,
+        to=MyUser,
         on_delete=CASCADE,
     )
     date_added = DateTimeField(
