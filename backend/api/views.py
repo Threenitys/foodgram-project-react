@@ -258,18 +258,6 @@ class RecipeViewSet(ModelViewSet, AddDelViewMixin):
 
     @action(methods=("get",), detail=False)
     def download_shopping_cart(self, request: WSGIRequest) -> Response:
-        """Загружает файл *.txt со списком покупок.
-
-        Считает сумму ингредиентов в рецептах выбранных для покупки.
-        Возвращает текстовый файл со списком ингредиентов.
-        Вызов метода через url:  */recipes/download_shopping_cart/.
-
-        Args:
-            request (WSGIRequest): Объект запроса..
-
-        Returns:
-            Responce: Ответ с текстовым файлом.
-        """
         user = self.request.user
         if not user.carts.exists():
             return Response(status=HTTP_400_BAD_REQUEST)

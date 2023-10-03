@@ -7,7 +7,6 @@ from rest_framework.routers import APIRootView
 
 
 class BanPermission(BasePermission):
-    """Базовый класс разрешений с проверкой - забанен ли пользователь."""
 
     def has_permission(self, request: WSGIRequest, view: APIRootView) -> bool:
         return bool(
@@ -18,10 +17,6 @@ class BanPermission(BasePermission):
 
 
 class AuthorStaffOrReadOnly(BanPermission):
-    """
-    Разрешение на изменение только для служебного персонала и автора.
-    Остальным только чтение объекта.
-    """
 
     def has_object_permission(
         self, request: WSGIRequest, view: APIRootView, obj: Model
@@ -35,10 +30,6 @@ class AuthorStaffOrReadOnly(BanPermission):
 
 
 class AdminOrReadOnly(BanPermission):
-    """
-    Разрешение на создание и изменение только для админов.
-    Остальным только чтение объекта.
-    """
 
     def has_object_permission(
         self, request: WSGIRequest, view: APIRootView
@@ -52,10 +43,6 @@ class AdminOrReadOnly(BanPermission):
 
 
 class OwnerUserOrReadOnly(BanPermission):
-    """
-    Разрешение на создание и изменение только для админа и пользователя.
-    Остальным только чтение объекта.
-    """
 
     def has_object_permission(
         self, request: WSGIRequest, view: APIRootView, obj: Model
