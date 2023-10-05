@@ -8,7 +8,7 @@ DEBUG = config("DEBUG", default=True, cast=bool)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config("SECRET_KEY", default="string_from_.env")
+SECRET_KEY = config("SECRET_KEY", default="django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$")
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="foodgramm96.hopto.org", cast=Csv())
 
@@ -68,10 +68,10 @@ TEMPLATES = [
 DATABASES = {
     "default": {
         "ENGINE": config("DB_ENGINE", default="django.db.backends.postgresql"),
-        "NAME": config("DB_NAME", default="postgres"),
-        "USER": config("POSTGRES_USER", default="postgres"),
-        "PASSWORD": config("POSTGRES_PASSWORD", default="postgres"),
-        "HOST": config("DB_HOST", default="127.0.0.1"),
+        "NAME": config("POSTGRES_DB", default="db"),
+        "USER": config("POSTGRES_USER", default="django_user"),
+        "PASSWORD": config("POSTGRES_PASSWORD", default="mysecretpassword"),
+        "HOST": config("DB_HOST", default="192.168.0.51"),
         "PORT": config("DB_PORT", default=5432, cast=int),
     }
 }
