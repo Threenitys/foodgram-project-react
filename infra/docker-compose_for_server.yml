@@ -1,22 +1,16 @@
 version: '3.3'
 
-volumes:
-  postgres_data:
-  static_value:
-  media_value:
-  data_value:
-
 services:
   db:
     image: postgres:14.8-bullseye
     restart: always
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data1:/var/lib/postgresql/data/
     env_file:
       - ./.env
 
   backend:
-    image: threenity/foodgram_backend:latest
+    image: threenity/foodgram_backend
     restart: always
     volumes:
       - data_value:/code/data/
@@ -28,7 +22,8 @@ services:
       - ./.env
 
   frontend:
-    image: threenity/foodgram_frontend:latest
+    image: threenity/foodgram_frontend
+    restart: always
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
@@ -37,10 +32,17 @@ services:
   nginx:
     image: nginx:1.19.3
     ports:
-      - 80:80
+      - 8000:80
     volumes:
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
       - ../docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
       - static_value:/var/html/django_static/
       - media_value:/var/html/media/
+
+volumes:
+  postgres_data1:
+  static_value:
+  media_value:
+  data_value:
+
