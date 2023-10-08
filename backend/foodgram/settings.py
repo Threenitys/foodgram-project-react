@@ -14,8 +14,6 @@ ALLOWED_HOSTS = os.environ.get(
     'ALLOWED_HOSTS', default='localhost').split(', ')
 ALLOWED_HOSTS += ['158.160.8.134', '127.0.0.1', 'foodgramm96.hopto.org', 'backend']
 
-CSRF_TRUSTED_ORIGINS = ['http://foodgram96.hopto.org']
-
 AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
@@ -27,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'recipes.apps.RecipesConfig',
-    'corsheaders',
     'api.apps.ApiConfig',
     'djoser',
     'rest_framework',
@@ -39,7 +36,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
