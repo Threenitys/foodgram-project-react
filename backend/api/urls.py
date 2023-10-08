@@ -13,7 +13,6 @@ router.register('tags', TagsViewSet)
 router.register('ingredients', IngredientsViewSet)
 router.register('recipes', RecipesViewSet)
 
-
 urlpatterns = [
      path('auth/token/login/',
           AuthToken.as_view(),
