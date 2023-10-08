@@ -30,7 +30,7 @@ urlpatterns = [
          name='set_password'),
     path('users/<int:user_id>/subscribe/',
          AddAndDeleteSubscribe.as_view(),
-          name='subscribe'),
+         name='subscribe'),
     path('recipes/<int:recipe_id>/favorite/',
          AddDeleteFavoriteRecipe.as_view(),
          name='favorite_recipe'),
