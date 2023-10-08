@@ -8,10 +8,13 @@ BASE_DIR = os.path.dirname(
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-123')
 
-DEBUG = os.getenv('DEBUG', default='True') == 'True'
+DEBUG = os.getenv('DEBUG', default='False') == 'True'
 
 ALLOWED_HOSTS = os.environ.get(
     'ALLOWED_HOSTS', default='localhost').split(', ')
+ALLOWED_HOSTS += ['158.160.8.134', '127.0.0.1', 'foodgramm96.hopto.org', 'backend']
+
+CSRF_TRUSTED_ORIGINS = ['http://foodgram96.hopto.org']
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -24,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'recipes.apps.RecipesConfig',
+    'corsheaders',
     'api.apps.ApiConfig',
     'djoser',
     'rest_framework',
@@ -35,6 +39,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -64,10 +69,10 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'django'),
-        'USER': os.getenv('POSTGRES_USER', 'django'),
+        'NAME': os.getenv('POSTGRES_DB', 'db'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', ''),
+        'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': os.getenv('DB_PORT', 5432)
     }
 }
@@ -119,6 +124,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'api.pagination.LimitPageNumberPagination',
     'PAGE_SIZE': 6,
 }
+
 
 DJOSER = {
     'SERIALIZERS': {
