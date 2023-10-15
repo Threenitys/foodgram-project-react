@@ -19,7 +19,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'pub_date', 'get_favorite_count')
     search_fields = (
         'name', 'cooking_time',
-        'author__email', 'ingredients__name')
+        'author__email', 'ingredients__name', 'tags__name')
     list_filter = ('pub_date', 'tags',)
     inlines = (RecipeIngredientAdmin,)
     empty_value_display = EMPTY_MSG

@@ -144,7 +144,7 @@ class Subscribe(models.Model):
 
 
 class FavoriteRecipe(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         null=True,
@@ -160,7 +160,7 @@ class FavoriteRecipe(models.Model):
         verbose_name_plural = 'Избранные рецепты'
 
     def __str__(self):
-        list_ = [item['name'] for item in self.recipe.values('name')]
+        list_ = [item['name'] for item in self.recipe.all()]
         return f'Пользователь {self.user} добавил {list_} в избранные.'
 
     @receiver(post_save, sender=User)
@@ -171,7 +171,7 @@ class FavoriteRecipe(models.Model):
 
 
 class ShoppingCart(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='shopping_cart',
@@ -188,7 +188,7 @@ class ShoppingCart(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        list_ = [item['name'] for item in self.recipe.values('name')]
+        list_ = [item['name'] for item in self.recipe.all()]
         return f'Пользователь {self.user} добавил {list_} в покупки.'
 
     @receiver(post_save, sender=User)
